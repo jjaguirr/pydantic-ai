@@ -1272,7 +1272,7 @@ class Agent(AbstractAgent[AgentDepsT, OutputDataT]):
         graph = _agent_graph.build_agent_graph(self.name, self._deps_type, output_type_)
 
         # Build the initial state
-        usage = usage or _usage.RunUsage()
+        usage = (usage or _usage.RunUsage()) + _usage.RunUsage()
         state = _agent_graph.GraphAgentState(
             message_history=list(message_history) if message_history else [],
             usage=usage,

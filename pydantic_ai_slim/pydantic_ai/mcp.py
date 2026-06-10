@@ -1118,6 +1118,7 @@ class MCPServer(AbstractToolset[Any], ABC):
             )
             for mcp_tool in await self.list_tools()
             if (name := f'{self.tool_prefix}_{mcp_tool.name}' if self.tool_prefix else mcp_tool.name)
+            and mcp_tool.description
         }
 
     def tool_for_tool_def(self, tool_def: ToolDefinition) -> ToolsetTool[Any]:
@@ -2450,6 +2451,8 @@ class MCPToolset(AbstractToolset[AgentDepsT]):
         max_retries = self.max_retries if self.max_retries is not None else ctx.max_retries
         tools: dict[str, ToolsetTool[AgentDepsT]] = {}
         for mcp_tool in await self.list_tools():
+            if not mcp_tool.description:
+                continue
             task_support = mcp_tool.execution.taskSupport if mcp_tool.execution else None
             tools[mcp_tool.name] = ToolsetTool[AgentDepsT](
                 toolset=self,

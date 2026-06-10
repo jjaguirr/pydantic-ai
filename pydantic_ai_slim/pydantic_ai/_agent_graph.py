@@ -2233,11 +2233,8 @@ def _clean_message_history(messages: list[_messages.ModelMessage]) -> list[_mess
                     or last_message.instructions == message.instructions
                 )
             ):
+                # Preserve chronological part order when merging consecutive requests
                 parts = [*last_message.parts, *message.parts]
-                parts.sort(
-                    # Tool return parts always need to be at the start
-                    key=lambda x: 0 if isinstance(x, _messages.ToolReturnPart | _messages.RetryPromptPart) else 1
-                )
                 merged_message = _messages.ModelRequest(
                     parts=parts,
                     instructions=last_message.instructions or message.instructions,

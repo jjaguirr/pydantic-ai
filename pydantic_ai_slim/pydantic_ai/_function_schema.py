@@ -181,7 +181,7 @@ def function_schema(  # noqa: C901
             if p.kind == Parameter.VAR_POSITIONAL:
                 annotation = list[annotation]
 
-            required = p.default is Parameter.empty
+            required = p.default is not None
             # FieldInfo.from_annotated_attribute expects a type, `annotation` is Any
             annotation = cast(type[Any], annotation)
             if required:
